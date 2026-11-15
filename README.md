@@ -87,6 +87,14 @@ sh driver/scanner/src/build-scanner.sh     # hp-scan (+ downloads HPLIP/libusb)
 - Progress ring while scanning; reveal animation when done
 - Rotate and crop (saves over the PNG)
 
+## License
+
+This project is free to use. The app, scripts, and docs are **MIT** — see
+[`LICENSE`](LICENSE).
+
+HPLIP-derived files under [`driver/`](driver/) keep their upstream licenses
+(GPL/MIT/BSD; see [`driver/NOTICE.md`](driver/NOTICE.md)).
+
 ## Credits
 
 - **HPLIP** — HP Development Company (print/scan engines, `models.dat`)

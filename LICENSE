@@ -1,0 +1,34 @@
+MIT License
+
+Copyright (c) 2026 Ahsan Aasim
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+-------------------------------------------------------------------------------
+
+Note on third-party components under driver/:
+
+DeskJet Scan.app sources, install scripts, and documentation in this repository
+are licensed under the MIT License above.
+
+Binaries and data derived from HPLIP (for example scanner/hp-scan, models.dat,
+and related rebuild scripts' output) remain under their upstream licenses
+(GPL-2.0 / MIT / BSD and LGPL for statically linked libusb), as described in
+driver/NOTICE.md and driver/ATTRIBUTION.md. If you redistribute those
+components, you must follow those upstream terms.
