@@ -1,109 +1,96 @@
 # DeskJet Scan
 
-A small macOS app for the **HP DeskJet 2300 series** flatbed scanner.
+A small macOS app for the **HP DeskJet 2300 series** flatbed scanner, plus a
+**self-contained USB driver kit** in [`driver/`](driver/).
 
-HP Easy Scan does not list this printer. The scanner speaks HP LEDM over a vendor USB interface, while Easy Scan only discovers Image Capture and AirScan / Bonjour devices. This app is a window around [`hp-scan`](https://github.com/squatchus/hp-deskjet-2320-macos-driver) from the community DeskJet driver — it does not embed or reverse-engineer HP Easy Scan’s binary.
+HP Easy Scan does not list this printer (no Image Capture / AirScan path). This
+project speaks the printer’s USB LEDM scanner stack through `hp-scan`, built
+from **HPLIP** sources and packaged here so you are **not** dependent on any
+other GitHub repository.
 
 ## Prerequisites
 
-1. **macOS 14+** (Apple Silicon or Intel)
-2. **Xcode Command Line Tools** (for building from source):
+- macOS 14+
+- DeskJet 2300 series on USB
+- Xcode Command Line Tools only if you build the app from source:
+  `xcode-select --install`
 
-   ```sh
-   xcode-select --install
-   ```
+## Install driver support (required once)
 
-3. **`hp-scan` installed** (from the DeskJet driver):
+Everything lives in this repo under `driver/`. No external clone.
 
-   ```sh
-   git clone https://github.com/squatchus/hp-deskjet-2320-macos-driver.git
-   cd hp-deskjet-2320-macos-driver
-   sh install.sh
-   ```
+```sh
+git clone git@github.com:ahsanaasim/hp-deskjet-2300-series-macos-app.git
+cd hp-deskjet-2300-series-macos-app
 
-   Confirm the scanner is visible:
+# Enough for the scan app:
+sh install.sh --scan-only
 
-   ```sh
-   hp-scan -L
-   ```
+# Or printing + scanning:
+sh install.sh
+```
 
-   You should see a line like:
+Check:
 
-   ```text
-   /usb/DeskJet_2300_series?serial=…  (Hewlett-Packard DeskJet_2300_series)
-   ```
+```sh
+hp-scan -L
+```
 
-   Note: `hp-scan -L` may exit with code `1` even when a device is listed. That is a known quirk; a printed device line means discovery worked.
+Attribution and licenses for the kit: [`driver/ATTRIBUTION.md`](driver/ATTRIBUTION.md),
+[`driver/NOTICE.md`](driver/NOTICE.md).
 
 ## How to run (from a release)
 
-1. Install the DeskJet driver / `hp-scan` (see Prerequisites).
-2. Download **DeskJet-Scan-macOS.zip** from the GitHub release.
-3. Unzip it.
-4. Move **DeskJet Scan.app** to Applications (or leave it on the Desktop).
-5. Open the app (right-click → **Open** the first time if macOS blocks an unsigned app).
-6. Connect the DeskJet over USB, power it on, put the page face down, then click **Scan**.
+1. Download **DeskJet-Scan-*-macOS.zip** from
+   [Releases](https://github.com/ahsanaasim/hp-deskjet-2300-series-macos-app/releases).
+2. Unzip. You get `DeskJet Scan.app`, `install.sh`, and `driver/`.
+3. Run **`sh install.sh --scan-only`** once (admin password).
+4. Open **DeskJet Scan.app** (right-click → Open the first time if Gatekeeper warns).
+5. Scan; files go to `~/Desktop/Scans/`.
 
-Scans are saved to `~/Desktop/Scans/`.
-
-See [RELEASE_NOTES.md](RELEASE_NOTES.md) for install notes shipped with each release.
+Details: [`RELEASE_NOTES.md`](RELEASE_NOTES.md).
 
 ## How to run (from source)
 
 ```sh
-git clone <this-repo-url>
-cd hp-scanner
+sh install.sh --scan-only
 sh app/build.sh
 open "dist/DeskJet Scan.app"
 ```
 
 ## How to build
 
-### Dev build (local `.app`)
+### App only
 
 ```sh
 sh app/build.sh
+# → dist/DeskJet Scan.app  (universal arm64 + x86_64)
 ```
 
-Output:
-
-```text
-dist/DeskJet Scan.app
-```
-
-The binary is a **universal** Mach-O (arm64 + x86_64), ad-hoc signed.
-
-### Release package (zip + notes)
+### Release zip (app + driver kit + notes)
 
 ```sh
-sh scripts/make-release.sh
+sh scripts/make-release.sh 1.1.0
+# → release/DeskJet-Scan-1.1.0-macOS.zip
 ```
 
-Optional version tag:
+### Rebuild HPLIP binaries (optional)
 
 ```sh
-sh scripts/make-release.sh 1.0.0
+sh driver/scripts/build.sh                 # hpcups
+sh driver/scanner/src/build-scanner.sh     # hp-scan (+ downloads HPLIP/libusb)
 ```
-
-Output:
-
-```text
-release/DeskJet-Scan-<version>-macOS/
-  DeskJet Scan.app
-  RELEASE_NOTES.md
-release/DeskJet-Scan-<version>-macOS.zip
-```
-
-Upload the `.zip` (and paste `RELEASE_NOTES.md`) when creating a GitHub Release.
 
 ## Features
 
-- Color / grayscale scan at 75–600 dpi
-- Progress ring in the preview while scanning (`hp-scan` does not report percent)
-- Reveal animation when the scan finishes
-- Rotate left / right and crop (edits overwrite the saved PNG)
+- Color / grayscale @ 75–600 dpi
+- Progress ring while scanning; reveal animation when done
+- Rotate and crop (saves over the PNG)
 
-## License / credit
+## Credits
 
-- App UI and scripts: use as you like for this project.
-- Scanning depends on HPLIP-derived `hp-scan` from [squatchus/hp-deskjet-2320-macos-driver](https://github.com/squatchus/hp-deskjet-2320-macos-driver) (GPLv2 for the scanner stack). Install that driver separately; this repo does not redistribute those binaries.
+- **HPLIP** — HP Development Company (print/scan engines, `models.dat`)
+- macOS packaging approach originally demonstrated by
+  [squatchus/hp-deskjet-2320-macos-driver](https://github.com/squatchus/hp-deskjet-2320-macos-driver);
+  this repo vendors and maintains its own kit so releases stay self-contained
+- **DeskJet Scan.app** — this project

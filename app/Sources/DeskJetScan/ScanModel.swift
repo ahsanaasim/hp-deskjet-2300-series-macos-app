@@ -55,7 +55,7 @@ final class ScanModel {
         guard let tool = HPScanCLI.locate() else {
             toolPath = nil
             devices = []
-            status = "hp-scan is not installed. Run the DeskJet driver installer first."
+            status = "hp-scan is not installed. From this project run: sh install.sh --scan-only"
             return
         }
         toolPath = tool
