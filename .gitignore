@@ -1,0 +1,5 @@
+dist/
+release/
+vendor/
+.DS_Store
+*.tmp.bmp
